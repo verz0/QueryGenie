@@ -72,10 +72,22 @@ class QueryService {
   }
 
   async generateSQLQuery(naturalLanguageQuery, schemas) {
-    return await this.api.post('/query/generate-query', {
+    // Get user's API configuration from localStorage
+    const provider = localStorage.getItem('llm_provider');
+    const apiKey = localStorage.getItem('api_key');
+    
+    const payload = {
       query: naturalLanguageQuery,
       schemas: schemas
-    });
+    };
+    
+    // Include user's API key if available
+    if (provider && apiKey) {
+      payload.provider = provider;
+      payload.apiKey = apiKey;
+    }
+    
+    return await this.api.post('/query/generate-query', payload);
   }
 
   async executeQuery(sqlQuery, dbConfig) {

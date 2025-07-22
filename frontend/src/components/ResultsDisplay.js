@@ -50,7 +50,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
-const COLORS = ['#00ADB5', '#64ffda', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD'];
+const COLORS = [
+  '#6366f1', // Indigo
+  '#8b5cf6', // Purple  
+  '#06b6d4', // Cyan
+  '#10b981', // Emerald
+  '#f59e0b', // Amber
+  '#ef4444', // Red
+  '#ec4899', // Pink
+  '#84cc16', // Lime
+  '#f97316', // Orange
+  '#3b82f6', // Blue
+];
 
 const ResultsDisplay = ({ results, ...props }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -157,12 +168,19 @@ const ResultsDisplay = ({ results, ...props }) => {
         return (
           <ResponsiveContainer {...commonProps}>
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(203, 213, 225, 0.2)" />
+              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} stroke="#cbd5e1" />
+              <YAxis stroke="#cbd5e1" />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '8px',
+                  color: '#f8fafc'
+                }}
+              />
               <Legend />
-              <Bar dataKey={yColumn} fill="#00ADB5" />
+              <Bar dataKey={yColumn} fill="#6366f1" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         );
@@ -171,12 +189,19 @@ const ResultsDisplay = ({ results, ...props }) => {
         return (
           <ResponsiveContainer {...commonProps}>
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} />
-              <YAxis />
-              <Tooltip />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(203, 213, 225, 0.2)" />
+              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} stroke="#cbd5e1" />
+              <YAxis stroke="#cbd5e1" />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '8px',
+                  color: '#f8fafc'
+                }}
+              />
               <Legend />
-              <Line type="monotone" dataKey={yColumn} stroke="#00ADB5" strokeWidth={2} />
+              <Line type="monotone" dataKey={yColumn} stroke="#6366f1" strokeWidth={3} dot={{ fill: '#6366f1', strokeWidth: 2, r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         );
@@ -185,12 +210,25 @@ const ResultsDisplay = ({ results, ...props }) => {
         return (
           <ResponsiveContainer {...commonProps}>
             <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} />
-              <YAxis />
-              <Tooltip />
+              <defs>
+                <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(203, 213, 225, 0.2)" />
+              <XAxis dataKey={xColumn} angle={-45} textAnchor="end" height={80} stroke="#cbd5e1" />
+              <YAxis stroke="#cbd5e1" />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '8px',
+                  color: '#f8fafc'
+                }}
+              />
               <Legend />
-              <Area type="monotone" dataKey={yColumn} stroke="#00ADB5" fill="#00ADB5" fillOpacity={0.6} />
+              <Area type="monotone" dataKey={yColumn} stroke="#6366f1" fill="url(#colorGradient)" fillOpacity={0.8} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         );
@@ -199,11 +237,19 @@ const ResultsDisplay = ({ results, ...props }) => {
         return (
           <ResponsiveContainer {...commonProps}>
             <ScatterChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey={xColumn} name={xColumn} />
-              <YAxis dataKey={yColumn} name={yColumn} />
-              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-              <Scatter dataKey={yColumn} fill="#00ADB5" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(203, 213, 225, 0.2)" />
+              <XAxis dataKey={xColumn} name={xColumn} stroke="#cbd5e1" />
+              <YAxis dataKey={yColumn} name={yColumn} stroke="#cbd5e1" />
+              <Tooltip 
+                cursor={{ strokeDasharray: '3 3' }}
+                contentStyle={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '8px',
+                  color: '#f8fafc'
+                }}
+              />
+              <Scatter dataKey={yColumn} fill="#6366f1" />
             </ScatterChart>
           </ResponsiveContainer>
         );
@@ -234,7 +280,14 @@ const ResultsDisplay = ({ results, ...props }) => {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  borderRadius: '8px',
+                  color: '#f8fafc'
+                }}
+              />
             </PieChart>
           </ResponsiveContainer>
         );
@@ -247,43 +300,115 @@ const ResultsDisplay = ({ results, ...props }) => {
   return (
     <Paper {...props} sx={{ ...props.sx }}>
       <Box sx={{ p: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <BarChartIcon />
-            Query Results ({data.length} rows)
-          </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box
+              sx={{
+                p: 1.5,
+                borderRadius: 2,
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+              }}
+            >
+              <BarChartIcon sx={{ color: 'white', fontSize: 28 }} />
+            </Box>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                Query Results
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {data.length} rows retrieved
+              </Typography>
+            </Box>
+          </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
               size="small"
+              variant="outlined"
               startIcon={<VisibilityIcon />}
               onClick={() => setChartDialogOpen(true)}
               disabled={data.length === 0}
+              sx={{
+                borderColor: 'primary.main',
+                color: 'primary.main',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                },
+              }}
             >
               Visualize
             </Button>
             <Button
               size="small"
+              variant="contained"
               startIcon={<DownloadIcon />}
               onClick={() => exportData('csv')}
               disabled={data.length === 0}
+              sx={{
+                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #0891b2, #0e7490)',
+                },
+              }}
             >
               Export CSV
             </Button>
             <Button
               size="small"
+              variant="contained"
               startIcon={<DownloadIcon />}
               onClick={() => exportData('json')}
               disabled={data.length === 0}
+              sx={{
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #059669, #047857)',
+                },
+              }}
             >
               Export JSON
             </Button>
           </Box>
         </Box>
 
-        <Tabs value={activeTab} onChange={handleTabChange}>
-          <Tab label="Data Table" />
-          <Tab label="Summary Statistics" />
-          <Tab label="Visualization" />
+        <Tabs 
+          value={activeTab} 
+          onChange={handleTabChange}
+          sx={{
+            mb: 3,
+            '& .MuiTabs-flexContainer': {
+              gap: 1,
+            },
+          }}
+        >
+          <Tab 
+            label="Data Table" 
+            sx={{
+              minHeight: 48,
+              textTransform: 'none',
+              fontWeight: 500,
+              fontSize: '1rem',
+            }} 
+          />
+          <Tab 
+            label="Summary Statistics" 
+            sx={{
+              minHeight: 48,
+              textTransform: 'none',
+              fontWeight: 500,
+              fontSize: '1rem',
+            }} 
+          />
+          <Tab 
+            label="Visualization" 
+            sx={{
+              minHeight: 48,
+              textTransform: 'none',
+              fontWeight: 500,
+              fontSize: '1rem',
+            }} 
+          />
         </Tabs>
 
         {activeTab === 0 && (
@@ -331,20 +456,55 @@ const ResultsDisplay = ({ results, ...props }) => {
             <Grid container spacing={2}>
               {Object.entries(summaryStats).map(([column, stats]) => (
                 <Grid item xs={12} md={6} lg={4} key={column}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
-                        {column}
-                      </Typography>
-                      <Grid container spacing={1}>
+                  <Card
+                    sx={{
+                      height: '100%',
+                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1))',
+                      border: '1px solid rgba(99, 102, 241, 0.2)',
+                      transition: 'all 0.3s ease-in-out',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 20px 25px -5px rgba(99, 102, 241, 0.3)',
+                        borderColor: 'rgba(99, 102, 241, 0.4)',
+                      },
+                    }}
+                  >
+                    <CardContent sx={{ p: 3 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                        <Box
+                          sx={{
+                            p: 1,
+                            borderRadius: 2,
+                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                            mr: 2,
+                          }}
+                        >
+                          <Typography variant="h6" sx={{ color: 'white', fontSize: '0.875rem', fontWeight: 600 }}>
+                            {column.charAt(0).toUpperCase()}
+                          </Typography>
+                        </Box>
+                        <Typography variant="h6" sx={{ fontWeight: 600, color: 'text.primary' }}>
+                          {column}
+                        </Typography>
+                      </Box>
+                      <Grid container spacing={2}>
                         {Object.entries(stats).map(([stat, value]) => (
                           <Grid item xs={6} key={stat}>
-                            <Typography variant="body2" color="textSecondary">
-                              {stat.charAt(0).toUpperCase() + stat.slice(1)}:
-                            </Typography>
-                            <Typography variant="body2" fontWeight="bold">
-                              {value}
-                            </Typography>
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                borderRadius: 2,
+                                backgroundColor: 'rgba(51, 65, 85, 0.3)',
+                                border: '1px solid rgba(71, 85, 105, 0.2)',
+                              }}
+                            >
+                              <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.75rem', fontWeight: 500 }}>
+                                {stat.charAt(0).toUpperCase() + stat.slice(1)}
+                              </Typography>
+                              <Typography variant="body1" sx={{ fontWeight: 600, color: 'text.primary', fontSize: '1rem' }}>
+                                {value}
+                              </Typography>
+                            </Box>
                           </Grid>
                         ))}
                       </Grid>
@@ -412,7 +572,29 @@ const ResultsDisplay = ({ results, ...props }) => {
               )}
             </Grid>
 
-            <Box sx={{ height: 400, border: '1px solid', borderColor: 'divider', borderRadius: 1, p: 2 }}>
+            <Box 
+              sx={{ 
+                height: 400, 
+                border: '2px solid',
+                borderColor: 'rgba(99, 102, 241, 0.2)',
+                borderRadius: 3,
+                p: 3,
+                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.4), rgba(51, 65, 85, 0.2))',
+                backdropFilter: 'blur(10px)',
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05))',
+                  pointerEvents: 'none',
+                },
+              }}
+            >
               {renderChart() || (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                   <Typography variant="body2" color="textSecondary">

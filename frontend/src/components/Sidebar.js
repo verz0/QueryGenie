@@ -22,6 +22,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DatabaseIcon from '@mui/icons-material/Storage';
 import { useDropzone } from 'react-dropzone';
+import ApiKeyConfig from './ApiKeyConfig';
 
 const Sidebar = ({ 
   dbConfig, 
@@ -75,19 +76,91 @@ const Sidebar = ({
   const tableNames = Object.keys(schemas);
 
   return (
-    <Box sx={{ p: 2, height: '100%', overflow: 'auto' }}>
-      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <DatabaseIcon />
-        Database Configuration
+    <Box sx={{ 
+      p: 2, 
+      height: '100%', 
+      overflow: 'auto',
+      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+    }}>
+      <Typography 
+        variant="h6" 
+        gutterBottom 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 1,
+          fontWeight: 600,
+          background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          mb: 3,
+        }}
+      >
+        <DatabaseIcon sx={{ color: 'primary.main' }} />
+        Configuration
       </Typography>
 
-      <Paper sx={{ p: 2, mb: 2 }}>
+      <ApiKeyConfig />
+
+      <Paper sx={{ 
+        p: 3, 
+        mb: 3,
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 3,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      }}>
+        <Typography 
+          variant="h6" 
+          gutterBottom 
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 1,
+            fontWeight: 600,
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            mb: 3,
+          }}
+        >
+          <DatabaseIcon sx={{ color: 'primary.main' }} />
+          Database Setup
+        </Typography>
         <FormControl fullWidth margin="normal">
-          <Typography variant="subtitle2" gutterBottom>Database Type</Typography>
+          <Typography 
+            variant="subtitle2" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 600,
+              color: 'primary.main',
+              mb: 1,
+            }}
+          >
+            Database Type
+          </Typography>
           <Select
             value={config.type}
             onChange={handleDbTypeChange}
             size="small"
+            sx={{
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'rgba(99, 102, 241, 0.3)',
+                },
+                '&:hover fieldset': {
+                  borderColor: 'primary.main',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'primary.main',
+                  borderWidth: 2,
+                },
+              },
+            }}
           >
             <MenuItem value="SQLite">SQLite</MenuItem>
             <MenuItem value="PostgreSQL">PostgreSQL</MenuItem>
@@ -99,23 +172,49 @@ const Sidebar = ({
             {...getRootProps()}
             sx={{
               border: '2px dashed',
-              borderColor: isDragActive ? 'primary.main' : 'grey.500',
-              borderRadius: 2,
-              p: 3,
+              borderColor: isDragActive ? 'primary.main' : 'rgba(99, 102, 241, 0.3)',
+              borderRadius: 3,
+              p: 4,
               mt: 2,
               textAlign: 'center',
               cursor: 'pointer',
-              bgcolor: isDragActive ? 'action.hover' : 'transparent',
+              background: isDragActive 
+                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%)'
+                : 'rgba(99, 102, 241, 0.05)',
+              transition: 'all 0.3s ease',
               '&:hover': {
-                bgcolor: 'action.hover',
-                borderColor: 'primary.main'
+                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%)',
+                borderColor: 'primary.main',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 8px 25px rgba(99, 102, 241, 0.3)',
               }
             }}
           >
             <input {...getInputProps()} />
-            <CloudUploadIcon sx={{ fontSize: 48, color: 'grey.500', mb: 1 }} />
-            <Typography variant="body2" color="textSecondary">
+            <CloudUploadIcon sx={{ 
+              fontSize: 48, 
+              color: 'primary.main', 
+              mb: 2,
+              opacity: 0.8,
+            }} />
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: 'text.primary',
+                fontWeight: 500,
+                mb: 1,
+              }}
+            >
               {isDragActive ? 'Drop the SQLite file here' : 'Drag & drop SQLite file or click to select'}
+            </Typography>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'text.secondary',
+                display: 'block',
+              }}
+            >
+              Supports .db, .sqlite files
             </Typography>
             {config.file && (
               <Typography variant="caption" color="primary" sx={{ mt: 1, display: 'block' }}>
@@ -127,7 +226,16 @@ const Sidebar = ({
 
         {config.type === 'PostgreSQL' && (
           <Box>
-            <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+            <Typography 
+              variant="subtitle2" 
+              gutterBottom 
+              sx={{ 
+                mt: 3,
+                fontWeight: 600,
+                color: 'primary.main',
+                mb: 2,
+              }}
+            >
               Connection Details
             </Typography>
             <TextField
@@ -138,6 +246,21 @@ const Sidebar = ({
               value={config.host}
               onChange={(e) => setConfig(prev => ({ ...prev, host: e.target.value }))}
               margin="dense"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                    borderWidth: 2,
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -146,6 +269,21 @@ const Sidebar = ({
               value={config.dbName}
               onChange={(e) => setConfig(prev => ({ ...prev, dbName: e.target.value }))}
               margin="dense"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                    borderWidth: 2,
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -154,6 +292,21 @@ const Sidebar = ({
               value={config.user}
               onChange={(e) => setConfig(prev => ({ ...prev, user: e.target.value }))}
               margin="dense"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                    borderWidth: 2,
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -163,68 +316,205 @@ const Sidebar = ({
               value={config.password}
               onChange={(e) => setConfig(prev => ({ ...prev, password: e.target.value }))}
               margin="dense"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '& fieldset': {
+                    borderColor: 'rgba(99, 102, 241, 0.3)',
+                  },
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: 'primary.main',
+                    borderWidth: 2,
+                  },
+                },
+              }}
             />
             <Button
               fullWidth
               variant="contained"
               onClick={handlePostgresConnect}
               disabled={!config.host || !config.dbName || !config.user || !config.password || loading}
-              sx={{ mt: 2 }}
+              sx={{ 
+                mt: 3,
+                borderRadius: 2,
+                py: 1.5,
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #5855eb, #7c3aed)',
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 8px 25px rgba(99, 102, 241, 0.4)',
+                },
+                '&:disabled': {
+                  background: 'rgba(99, 102, 241, 0.3)',
+                },
+                transition: 'all 0.3s ease',
+              }}
             >
-              {loading ? <CircularProgress size={20} /> : 'Connect'}
+              {loading ? <CircularProgress size={20} color="inherit" /> : 'Connect to Database'}
             </Button>
           </Box>
         )}
       </Paper>
 
       {tableNames.length > 0 && (
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" gutterBottom>
+        <Paper sx={{ 
+          p: 3,
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 3,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        }}>
+          <Typography 
+            variant="h6" 
+            gutterBottom
+            sx={{
+              fontWeight: 600,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              mb: 3,
+            }}
+          >
             Table Selection
           </Typography>
           
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mb: 3 }}>
             <Button
               size="small"
               onClick={handleSelectAll}
               variant="outlined"
+              sx={{
+                borderRadius: 2,
+                borderColor: 'rgba(99, 102, 241, 0.3)',
+                color: 'primary.main',
+                '&:hover': {
+                  borderColor: 'primary.main',
+                  backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                  transform: 'translateY(-1px)',
+                },
+                transition: 'all 0.2s ease',
+              }}
             >
               {selectedTables.length === tableNames.length ? 'Deselect All' : 'Select All'}
             </Button>
-            <Typography variant="caption" sx={{ ml: 2 }}>
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                ml: 2,
+                color: 'text.secondary',
+                fontWeight: 500,
+              }}
+            >
               {selectedTables.length} of {tableNames.length} selected
             </Typography>
           </Box>
 
           <FormGroup>
             {tableNames.map((tableName) => (
-              <Box key={tableName} sx={{ mb: 1 }}>
+              <Box 
+                key={tableName} 
+                sx={{ 
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 2,
+                  background: 'rgba(99, 102, 241, 0.05)',
+                  border: '1px solid rgba(99, 102, 241, 0.1)',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    background: 'rgba(99, 102, 241, 0.1)',
+                    transform: 'translateY(-1px)',
+                  },
+                }}
+              >
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={selectedTables.includes(tableName)}
                       onChange={() => handleTableToggle(tableName)}
                       size="small"
+                      sx={{
+                        color: 'rgba(99, 102, 241, 0.5)',
+                        '&.Mui-checked': {
+                          color: 'primary.main',
+                        },
+                      }}
                     />
                   }
-                  label={tableName}
+                  label={
+                    <Typography 
+                      sx={{ 
+                        fontWeight: selectedTables.includes(tableName) ? 600 : 400,
+                        color: selectedTables.includes(tableName) ? 'primary.main' : 'text.primary',
+                      }}
+                    >
+                      {tableName}
+                    </Typography>
+                  }
                 />
                 <Accordion
                   expanded={expandedSchema === tableName}
                   onChange={() => setExpandedSchema(expandedSchema === tableName ? null : tableName)}
-                  sx={{ mt: 0.5 }}
+                  sx={{ 
+                    mt: 1,
+                    background: 'transparent',
+                    boxShadow: 'none',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                    borderRadius: 1,
+                    '&:before': {
+                      display: 'none',
+                    },
+                  }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    sx={{ minHeight: 32, '& .MuiAccordionSummary-content': { margin: '8px 0' } }}
+                    expandIcon={<ExpandMoreIcon sx={{ color: 'primary.main' }} />}
+                    sx={{ 
+                      minHeight: 32, 
+                      '& .MuiAccordionSummary-content': { margin: '8px 0' },
+                      borderRadius: 1,
+                    }}
                   >
-                    <Typography variant="caption">View Schema</Typography>
+                    <Typography 
+                      variant="caption"
+                      sx={{ 
+                        color: 'primary.main',
+                        fontWeight: 500,
+                      }}
+                    >
+                      View Schema
+                    </Typography>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ pt: 0 }}>
+                  <AccordionDetails sx={{ 
+                    pt: 0,
+                    background: 'rgba(99, 102, 241, 0.02)',
+                    borderRadius: '0 0 4px 4px',
+                  }}>
                     <Box>
                       {schemas[tableName] && Object.entries(schemas[tableName]).map(([column, type]) => (
-                        <Typography key={column} variant="caption" component="div" sx={{ fontFamily: 'monospace' }}>
-                          {column}: {type}
+                        <Typography 
+                          key={column} 
+                          variant="caption" 
+                          component="div" 
+                          sx={{ 
+                            fontFamily: 'Monaco, Consolas, monospace',
+                            py: 0.5,
+                            px: 1,
+                            borderRadius: 1,
+                            background: 'rgba(99, 102, 241, 0.05)',
+                            mb: 0.5,
+                            color: 'text.primary',
+                          }}
+                        >
+                          <Box component="span" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                            {column}
+                          </Box>
+                          <Box component="span" sx={{ color: 'text.secondary', ml: 1 }}>
+                            : {type}
+                          </Box>
                         </Typography>
                       ))}
                     </Box>

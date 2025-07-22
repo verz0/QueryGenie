@@ -1,7 +1,7 @@
 {
-  "name": "nlp2sql-backend",
-  "version": "1.0.0",
-  "description": "Backend API for NLP2SQL application",
+  "name": "querygenie-backend",
+  "version": "2.0.0",
+  "description": "Backend API for QueryGenie - AI-Powered SQL Generation",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

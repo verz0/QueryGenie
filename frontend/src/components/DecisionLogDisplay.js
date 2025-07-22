@@ -25,7 +25,25 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   if (!decisionLog) {
-    return null;
+    return (
+      <Paper 
+        sx={{ 
+          p: 4,
+          textAlign: 'center',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          borderRadius: 3,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        }}
+        {...props}
+      >
+        <TimelineIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2, opacity: 0.6 }} />
+        <Typography variant="body2" color="text.secondary">
+          No decision log available
+        </Typography>
+      </Paper>
+    );
   }
 
   const handleTabChange = (event, newValue) => {
@@ -43,9 +61,31 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
         <Box>
           {decisionLog.query_input_details && (
             <Box sx={{ mb: 3 }}>
-              <Typography variant="h6" gutterBottom>Query Input Details</Typography>
+              <Typography 
+                variant="h6" 
+                gutterBottom
+                sx={{ 
+                  fontWeight: 600,
+                  color: 'primary.main',
+                  mb: 2,
+                }}
+              >
+                Query Input Details
+              </Typography>
               {decisionLog.query_input_details.map((detail, index) => (
-                <Alert key={index} severity="info" sx={{ mb: 1 }}>
+                <Alert 
+                  key={index} 
+                  severity="info" 
+                  sx={{ 
+                    mb: 1,
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    border: '1px solid rgba(6, 182, 212, 0.3)',
+                    '& .MuiAlert-icon': {
+                      color: 'secondary.main',
+                    },
+                  }}
+                >
                   {detail}
                 </Alert>
               ))}
@@ -54,11 +94,35 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
           
           {decisionLog.preprocessing_steps && (
             <Box>
-              <Typography variant="h6" gutterBottom>Preprocessing Steps</Typography>
+              <Typography 
+                variant="h6" 
+                gutterBottom
+                sx={{ 
+                  fontWeight: 600,
+                  color: 'primary.main',
+                  mb: 2,
+                }}
+              >
+                Preprocessing Steps
+              </Typography>
               {decisionLog.preprocessing_steps.map((step, index) => (
-                <Card key={index} sx={{ mb: 1 }}>
-                  <CardContent sx={{ py: 1, '&:last-child': { pb: 1 } }}>
-                    <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                <Card 
+                  key={index} 
+                  sx={{ 
+                    mb: 1,
+                    background: 'rgba(99, 102, 241, 0.05)',
+                    border: '1px solid rgba(99, 102, 241, 0.2)',
+                    borderRadius: 2,
+                  }}
+                >
+                  <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
+                    <Typography 
+                      variant="body2" 
+                      sx={{ 
+                        fontFamily: 'Monaco, Consolas, monospace',
+                        color: 'text.primary',
+                      }}
+                    >
                       {step}
                     </Typography>
                   </CardContent>
@@ -73,28 +137,99 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
       label: 'Paths',
       content: (
         <Box>
-          <Typography variant="h6" gutterBottom>Path Identification</Typography>
+          <Typography 
+            variant="h6" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 600,
+              color: 'primary.main',
+              mb: 2,
+            }}
+          >
+            Path Identification
+          </Typography>
           {decisionLog.path_identification?.map((path, index) => (
-            <Accordion key={index} defaultExpanded={index === 0}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Accordion 
+              key={index} 
+              defaultExpanded={index === 0}
+              sx={{
+                mb: 2,
+                background: 'rgba(139, 92, 246, 0.05)',
+                border: '1px solid rgba(139, 92, 246, 0.2)',
+                borderRadius: 2,
+                '&:before': {
+                  display: 'none',
+                },
+              }}
+            >
+              <AccordionSummary 
+                expandIcon={<ExpandMoreIcon sx={{ color: 'primary.main' }} />}
+                sx={{
+                  borderRadius: '8px 8px 0 0',
+                  background: 'rgba(139, 92, 246, 0.1)',
+                }}
+              >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
-                  <Typography variant="subtitle1">Path {index + 1}</Typography>
+                  <Typography 
+                    variant="subtitle1"
+                    sx={{ 
+                      fontWeight: 600,
+                      color: 'primary.main',
+                    }}
+                  >
+                    Path {index + 1}
+                  </Typography>
                   <Chip 
                     label={`Score: ${path.score}`} 
                     color={index === 0 ? 'primary' : 'default'}
                     size="small"
+                    sx={{
+                      background: index === 0 
+                        ? 'linear-gradient(135deg, #6366f1, #8b5cf6)'
+                        : 'rgba(99, 102, 241, 0.1)',
+                      color: index === 0 ? 'white' : 'primary.main',
+                      fontWeight: 600,
+                    }}
                   />
                 </Box>
               </AccordionSummary>
-              <AccordionDetails>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
+              <AccordionDetails sx={{ 
+                background: 'rgba(139, 92, 246, 0.02)',
+                borderRadius: '0 0 8px 8px',
+              }}>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary" 
+                  gutterBottom
+                  sx={{ fontStyle: 'italic' }}
+                >
                   {path.description}
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Typography variant="subtitle2" gutterBottom>Tables:</Typography>
+                    <Typography 
+                      variant="subtitle2" 
+                      gutterBottom
+                      sx={{ 
+                        fontWeight: 600,
+                        color: 'primary.main',
+                      }}
+                    >
+                      Tables:
+                    </Typography>
                     {path.tables?.map((table, i) => (
-                      <Chip key={i} label={table} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
+                      <Chip 
+                        key={i} 
+                        label={table} 
+                        size="small" 
+                        sx={{ 
+                          mr: 0.5, 
+                          mb: 0.5,
+                          background: 'rgba(6, 182, 212, 0.1)',
+                          color: 'secondary.main',
+                          border: '1px solid rgba(6, 182, 212, 0.3)',
+                        }} 
+                      />
                     ))}
                   </Grid>
                   <Grid item xs={6}>
@@ -196,10 +331,34 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
   }
 
   return (
-    <Paper {...props} sx={{ ...props.sx }}>
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <TimelineIcon />
+    <Paper 
+      {...props} 
+      sx={{ 
+        ...props.sx,
+        background: 'rgba(255, 255, 255, 0.05)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 3,
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      }}
+    >
+      <Box sx={{ p: 3 }}>
+        <Typography 
+          variant="h5" 
+          gutterBottom 
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 1,
+            fontWeight: 600,
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            mb: 3,
+          }}
+        >
+          <TimelineIcon sx={{ color: 'primary.main' }} />
           Decision Log
         </Typography>
         
@@ -208,13 +367,27 @@ const DecisionLogDisplay = ({ decisionLog, ...props }) => {
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons="auto"
+          sx={{
+            '& .MuiTabs-indicator': {
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              height: 3,
+            },
+            '& .MuiTab-root': {
+              color: 'text.secondary',
+              fontWeight: 500,
+              '&.Mui-selected': {
+                color: 'primary.main',
+                fontWeight: 600,
+              },
+            },
+          }}
         >
           {availableTabs.map((tab, index) => (
             <Tab key={index} label={tab.label} />
           ))}
         </Tabs>
         
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 3 }}>
           {availableTabs[Math.min(activeTab, availableTabs.length - 1)]?.content}
         </Box>
       </Box>

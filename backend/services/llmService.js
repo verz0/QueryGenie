@@ -101,14 +101,18 @@ Response format (JSON):
 }`;
   }
 
-  async generateSQLQuery(naturalLanguageQuery, schemas) {
+  async generateSQLQuery(naturalLanguageQuery, schemas, userProvider = null, userApiKey = null) {
     try {
       const systemMessage = this.generateSystemMessage(schemas);
       
-      if (this.provider === 'AZURE') {
-        return await this.generateWithAzureOpenAI(systemMessage, naturalLanguageQuery);
-      } else if (this.provider === 'GEMINI') {
-        return await this.generateWithGemini(systemMessage, naturalLanguageQuery);
+      // Use user-provided credentials if available, otherwise fall back to environment
+      const provider = userProvider || this.provider;
+      const apiKey = userApiKey || (provider === 'GEMINI' ? this.apiKey : this.apiKey);
+      
+      if (provider === 'AZURE' || provider === 'OPENAI') {
+        return await this.generateWithOpenAI(systemMessage, naturalLanguageQuery, apiKey, userProvider === 'OPENAI');
+      } else if (provider === 'GEMINI') {
+        return await this.generateWithGemini(systemMessage, naturalLanguageQuery, apiKey);
       } else {
         throw new Error('No LLM provider configured');
       }
@@ -126,14 +130,34 @@ Response format (JSON):
     }
   }
 
-  async generateWithAzureOpenAI(systemMessage, userQuery) {
-    if (!this.endpoint || !this.apiKey) {
-      throw new Error('Azure OpenAI configuration missing');
+  async generateWithOpenAI(systemMessage, userQuery, apiKey, isDirectOpenAI = false) {
+    if (!apiKey) {
+      throw new Error('OpenAI API key is required');
     }
 
-    const url = `${this.endpoint}/openai/deployments/${this.modelName}/chat/completions?api-version=${this.apiVersion}`;
+    let url, headers;
+    
+    if (isDirectOpenAI) {
+      // Direct OpenAI API
+      url = 'https://api.openai.com/v1/chat/completions';
+      headers = {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      };
+    } else {
+      // Azure OpenAI (existing logic)
+      if (!this.endpoint) {
+        throw new Error('Azure OpenAI endpoint configuration missing');
+      }
+      url = `${this.endpoint}/openai/deployments/${this.modelName}/chat/completions?api-version=${this.apiVersion}`;
+      headers = {
+        'api-key': apiKey,
+        'Content-Type': 'application/json'
+      };
+    }
     
     const response = await axios.post(url, {
+      model: isDirectOpenAI ? 'gpt-3.5-turbo' : undefined,
       messages: [
         { role: 'system', content: systemMessage },
         { role: 'user', content: userQuery }
@@ -142,10 +166,7 @@ Response format (JSON):
       temperature: 0.1,
       response_format: { type: 'json_object' }
     }, {
-      headers: {
-        'api-key': this.apiKey,
-        'Content-Type': 'application/json'
-      },
+      headers,
       timeout: 30000
     });
 
@@ -153,12 +174,14 @@ Response format (JSON):
     return JSON.parse(content);
   }
 
-  async generateWithGemini(systemMessage, userQuery) {
-    if (!this.apiKey) {
+  async generateWithGemini(systemMessage, userQuery, apiKey = null) {
+    const geminiApiKey = apiKey || this.apiKey;
+    
+    if (!geminiApiKey) {
       throw new Error('Gemini API key missing');
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
     
     const prompt = `${systemMessage}\n\nUser Query: ${userQuery}\n\nPlease respond with valid JSON only.`;
     

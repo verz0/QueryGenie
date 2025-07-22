@@ -8,7 +8,9 @@ const llmService = new LLMService();
 // Validation schema
 const generateQuerySchema = Joi.object({
   query: Joi.string().required().min(3).max(1000),
-  schemas: Joi.object().required()
+  schemas: Joi.object().required(),
+  provider: Joi.string().valid('GEMINI', 'OPENAI').optional(),
+  apiKey: Joi.string().optional()
 });
 
 // Generate SQL query from natural language
@@ -19,15 +21,15 @@ router.post('/generate-query', async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { query, schemas } = value;
+    const { query, schemas, provider, apiKey } = value;
 
     // Check if schemas are provided
     if (!schemas || Object.keys(schemas).length === 0) {
       return res.status(400).json({ error: 'Database schemas are required' });
     }
 
-    // Generate SQL query using LLM service
-    const response = await llmService.generateSQLQuery(query, schemas);
+    // Generate SQL query using LLM service with user-provided API key if available
+    const response = await llmService.generateSQLQuery(query, schemas, provider, apiKey);
 
     res.json(response);
 

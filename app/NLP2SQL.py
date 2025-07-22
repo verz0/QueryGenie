@@ -46,7 +46,7 @@ SUPPORTED_CHART_TYPES = {
 # Page Configuration with dark theme details
 st.set_page_config(
     page_icon="🗃️",
-    page_title="NLP2SQL",
+    page_title="QueryGenie",
     layout="wide"
 )
 
@@ -102,7 +102,9 @@ def apply_custom_theme():
 # Apply the custom theme early
 apply_custom_theme()
 
-load_dotenv()
+# Load environment variables from the correct path
+dotenv_path = os.path.join(os.path.dirname(__file__), "..", "backend", ".env")
+load_dotenv(dotenv_path)
 
 @st.cache_resource
 def load_system_message(schemas: dict) -> str:

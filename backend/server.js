@@ -12,6 +12,7 @@ require('dotenv').config();
 const databaseRoutes = require('./routes/database');
 const queryRoutes = require('./routes/query');
 const exportRoutes = require('./routes/export');
+const { router: configRoutes } = require('./routes/config');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -93,6 +94,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/database', upload.single('database'), databaseRoutes);
 app.use('/api/query', queryRoutes);
 app.use('/api/export', exportRoutes);
+app.use('/api/config', configRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -154,7 +156,7 @@ process.on('SIGTERM', () => {
 });
 
 const server = app.listen(PORT, () => {
-  console.log(`NLP2SQL Backend Server running on port ${PORT}`);
+  console.log(`QueryGenie Backend Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`LLM Provider: ${process.env.LLM_PROVIDER || 'not configured'}`);
 });

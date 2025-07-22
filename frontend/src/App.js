@@ -16,33 +16,138 @@ import DecisionLogDisplay from './components/DecisionLogDisplay';
 import QueryHistory from './components/QueryHistory';
 import { queryService } from './services/queryService';
 
-const darkTheme = createTheme({
+const modernTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#00ADB5',
+      main: '#6366f1', // Indigo
+      light: '#818cf8',
+      dark: '#4f46e5',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: '#64ffda',
+      main: '#06b6d4', // Cyan
+      light: '#67e8f9',
+      dark: '#0891b2',
+      contrastText: '#ffffff',
     },
     background: {
-      default: '#1e1e1e',
-      paper: '#333333',
+      default: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', // Gradient background
+      paper: 'rgba(30, 41, 59, 0.8)', // Semi-transparent cards
+    },
+    surface: {
+      main: '#1e293b',
+      light: '#334155',
+      dark: '#0f172a',
     },
     text: {
-      primary: '#64ffda',
-      secondary: '#ffffff',
+      primary: '#f8fafc',
+      secondary: '#cbd5e1',
+    },
+    success: {
+      main: '#10b981',
+      light: '#34d399',
+      dark: '#059669',
+    },
+    error: {
+      main: '#ef4444',
+      light: '#f87171',
+      dark: '#dc2626',
+    },
+    warning: {
+      main: '#f59e0b',
+      light: '#fbbf24',
+      dark: '#d97706',
+    },
+    accent: {
+      main: '#8b5cf6', // Purple accent
+      light: '#a78bfa',
+      dark: '#7c3aed',
     },
   },
   typography: {
-    fontFamily: 'sans-serif',
+    fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif',
+    h1: {
+      fontSize: '2.5rem',
+      fontWeight: 700,
+      letterSpacing: '-0.025em',
+    },
+    h2: {
+      fontSize: '2rem',
+      fontWeight: 600,
+      letterSpacing: '-0.025em',
+    },
+    h3: {
+      fontSize: '1.5rem',
+      fontWeight: 600,
+      letterSpacing: '-0.025em',
+    },
+    h4: {
+      fontSize: '1.25rem',
+      fontWeight: 600,
+    },
+    h5: {
+      fontSize: '1.125rem',
+      fontWeight: 600,
+    },
+    h6: {
+      fontSize: '1rem',
+      fontWeight: 600,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.6,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.5,
+    },
+    button: {
+      fontWeight: 500,
+      textTransform: 'none',
+      letterSpacing: '0.025em',
+    },
   },
+  shape: {
+    borderRadius: 12,
+  },
+  shadows: [
+    'none',
+    '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+    ...Array(19).fill('0 25px 50px -12px rgba(0, 0, 0, 0.25)'),
+  ],
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+          backgroundAttachment: 'fixed',
+          minHeight: '100vh',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: 'none',
-          borderRadius: '8px',
+          borderRadius: '12px',
+          fontWeight: 500,
+          padding: '10px 24px',
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          },
+        },
+        contained: {
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          '&:hover': {
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          },
         },
       },
     },
@@ -50,6 +155,124 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+          backgroundColor: 'rgba(30, 41, 59, 0.8)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(71, 85, 105, 0.3)',
+          borderRadius: '16px',
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            borderColor: 'rgba(99, 102, 241, 0.3)',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+          backgroundColor: 'rgba(30, 41, 59, 0.8)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(71, 85, 105, 0.3)',
+          borderRadius: '16px',
+          transition: 'all 0.2s ease-in-out',
+          '&:hover': {
+            borderColor: 'rgba(99, 102, 241, 0.3)',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '12px',
+            backgroundColor: 'rgba(51, 65, 85, 0.5)',
+            backdropFilter: 'blur(10px)',
+            '& fieldset': {
+              borderColor: 'rgba(71, 85, 105, 0.3)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(99, 102, 241, 0.5)',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#6366f1',
+            },
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          backgroundColor: 'rgba(51, 65, 85, 0.5)',
+          backdropFilter: 'blur(10px)',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(71, 85, 105, 0.3)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(99, 102, 241, 0.5)',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#6366f1',
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontWeight: 500,
+          fontSize: '1rem',
+          minHeight: '48px',
+          '&.Mui-selected': {
+            color: '#6366f1',
+          },
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: '#6366f1',
+          height: '3px',
+          borderRadius: '3px',
+        },
+      },
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableCell-head': {
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fontWeight: 600,
+            color: '#f8fafc',
+          },
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&:nth-of-type(odd)': {
+            backgroundColor: 'rgba(51, 65, 85, 0.2)',
+          },
+          '&:hover': {
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: '8px',
+          fontWeight: 500,
         },
       },
     },
@@ -75,7 +298,7 @@ function App() {
 
   useEffect(() => {
     // Load query history from localStorage
-    const savedHistory = localStorage.getItem('nlp2sql-query-history');
+    const savedHistory = localStorage.getItem('querygenie-query-history');
     if (savedHistory) {
       setQueryHistory(JSON.parse(savedHistory));
     }
@@ -147,7 +370,7 @@ function App() {
         
         const newHistory = [historyItem, ...queryHistory.slice(0, 49)]; // Keep last 50 queries
         setQueryHistory(newHistory);
-        localStorage.setItem('nlp2sql-query-history', JSON.stringify(newHistory));
+        localStorage.setItem('querygenie-query-history', JSON.stringify(newHistory));
       }
     } catch (err) {
       setError('Failed to process query: ' + err.message);
@@ -161,7 +384,7 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={modernTheme}>
       <CssBaseline />
       <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />

@@ -1,6 +1,6 @@
 {
-  "short_name": "NLP2SQL",
-  "name": "NLP2SQL - Natural Language to SQL",
+  "short_name": "QueryGenie",
+  "name": "QueryGenie - Natural Language to SQL",
   "icons": [
     {
       "src": "favicon.ico",
